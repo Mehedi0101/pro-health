@@ -16,3 +16,4 @@ export { IPatientPackageService } from "./schemas/PatientPackageService.types";
 export { ICustomError } from "./middlewares/errorHandler.types";
 export { IRegisterInput, ILoginInput } from "./services/auth.types";
 export { ITokenPayload } from "./utils/auth.types";
+export { IPasswordReset } from "./schemas/PasswordReset.types";
