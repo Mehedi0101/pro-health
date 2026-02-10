@@ -1,1 +1,1 @@
-export { register } from "./auth.controller";
+export { register, login } from "./auth.controller";

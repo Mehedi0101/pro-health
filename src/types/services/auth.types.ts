@@ -4,3 +4,8 @@ export interface IRegisterInput {
   password: string;
   role: "admin" | "staff" | "patient";
 }
+
+export interface ILoginInput {
+  email: string;
+  password: string;
+}
