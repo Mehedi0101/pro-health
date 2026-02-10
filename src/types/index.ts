@@ -14,3 +14,4 @@ export { IPatientService } from "./schemas/PatientService.types";
 export { IPatientPackage } from "./schemas/PatientPackage.types";
 export { IPatientPackageService } from "./schemas/PatientPackageService.types";
 export { ICustomError } from "./middlewares/errorHandler.types";
+export { IRegisterInput } from "./services/auth.types";

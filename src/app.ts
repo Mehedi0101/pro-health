@@ -2,8 +2,8 @@
 import express, { Request, Response } from "express";
 
 // internal imports
-import { errorHandler } from "./middlewares/errorHandler.middleware";
 import router from "./routes";
+import { errorHandler } from "./middlewares";
 
 const app = express();
 
