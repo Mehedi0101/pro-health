@@ -1,34 +1,90 @@
 import bcrypt from "bcrypt";
-import { HydratedDocument } from "mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
 import { IForgotPasswordInput, ILoginInput, IRegisterInput, IResetPasswordInput, IUser, IVerifyOtpInput } from "../types";
-import { PasswordReset, User } from "../schemas";
-import { generateOTP, generateToken } from "../utils";
+import { PasswordReset, Patient, Staff, User } from "../schemas";
+import { generateOTP, generateReferralLink, generateToken, generateUniqueReferralCode } from "../utils";
 import { sendOtpEmail } from "./mail.service";
 
 // ---------- register service ----------
 export const registerUser = async (
   input: IRegisterInput,
 ): Promise<HydratedDocument<IUser>> => {
-  // check existing user
-  const existingUser = await User.findOne({ email: input.email });
-  if (existingUser) {
-    const error = new Error("Email already registered") as any;
-    error.statusCode = 400;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // Checking existing user
+    const existingUser = await User.findOne({ email: input.email }).session(session);
+
+    if (existingUser) {
+      const error = new Error("Email already registered") as any;
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(input.password, 10);
+
+    // Create base user
+    const user = await User.create(
+      [
+        {
+          name: input.name,
+          email: input.email,
+          password: hashedPassword,
+          role: input.role,
+        },
+      ],
+      { session },
+    );
+
+    const createdUser = user[0];
+
+    // PATIENT
+    if (input.role === "patient") {
+
+      const code = await generateUniqueReferralCode();
+
+      await Patient.create(
+        [
+          {
+            user_id: createdUser._id,
+            referral_code: code,
+            referral_link: generateReferralLink(code),
+          },
+        ],
+        { session },
+      );
+    }
+
+    // STAFF
+    else if (input.role === "staff") {
+
+      await Staff.create(
+        [
+          {
+            user_id: createdUser._id
+          },
+        ],
+        { session },
+      );
+    }
+
+    // Commit
+    await session.commitTransaction();
+
+    return createdUser;
+
+  } catch (error) {
+
+    await session.abortTransaction();
     throw error;
+
+  } finally {
+    session.endSession();
   }
-
-  // hash password
-  const hashedPassword = await bcrypt.hash(input.password, 10);
-
-  // create user
-  const user = await User.create({
-    name: input.name,
-    email: input.email,
-    password: hashedPassword,
-    role: input.role,
-  });
-
-  return user; // full IUser object (with _id, timestamps)
 };
 
 //---------- login service ----------
