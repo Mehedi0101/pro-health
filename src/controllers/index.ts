@@ -1,1 +1,1 @@
-export { register, login } from "./auth.controller";
+export { register, login, forgotPasswordController, verifyOtpController, resetPasswordController } from "./auth.controller";

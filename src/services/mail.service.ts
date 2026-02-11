@@ -1,4 +1,7 @@
+import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+
+dotenv.config();
 
 export const sendOtpEmail = async (email: string, otp: string) => {
 
@@ -7,6 +10,9 @@ export const sendOtpEmail = async (email: string, otp: string) => {
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
+        },
+        tls: {
+            rejectUnauthorized: false,
         },
     });
 

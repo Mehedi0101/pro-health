@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { loginUser, registerUser } from "../services";
+import { forgotPassword, loginUser, registerUser, resetPassword, verifyOtp } from "../services";
 import { ILoginInput } from "../types";
 
 /** ----------------------------------
@@ -71,5 +71,71 @@ export const login = async (
     });
   } catch (error) {
     next(error);
+  }
+};
+
+/**--------------------------------
+ * @desc    Forgot password
+ * @route   POST /api/v1/auth/forgot-password
+ * @access  Public
+ */
+export const forgotPasswordController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await forgotPassword(req.body);
+
+    res.status(200).json({
+      success: true,
+      message: "If email exists, OTP sent successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**--------------------------------
+ * @desc    Verify OTP
+ * @route   POST /api/v1/auth/verify-otp
+ * @access  Public
+ */
+export const verifyOtpController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await verifyOtp(req.body);
+
+    res.status(200).json({
+      success: true,
+      message: "OTP verified successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**--------------------------------
+ * @desc    Reset Password
+ * @route   POST /api/v1/auth/reset-password
+ * @access  Public
+ */
+export const resetPasswordController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await resetPassword(req.body);
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successful",
+    });
+  } catch (err) {
+    next(err);
   }
 };
