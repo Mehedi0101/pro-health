@@ -1,5 +1,13 @@
 import { Router } from "express";
-import { forgotPasswordController, login, register, resetPasswordController, verifyOtpController } from "../controllers";
+import {
+  forgotPasswordController,
+  login,
+  logout,
+  register,
+  resetPasswordController,
+  verifyOtpController,
+} from "../controllers";
+import { requireAuth } from "../middlewares";
 
 const router = Router();
 
@@ -17,5 +25,8 @@ router.post("/verify-otp", verifyOtpController);
 
 // reset password
 router.post("/reset-password", resetPasswordController);
+
+// logout
+router.post("/logout", requireAuth, logout);
 
 export default router;

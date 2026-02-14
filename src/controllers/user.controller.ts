@@ -3,7 +3,7 @@ import { getMeService, updateUser } from "../services";
 
 /** ----------------------------------
  * @desc    get me
- * @route   GET /api/v1/users/getMe
+ * @route   GET /api/v1/users/me
  * @access  Users
  */
 export const getMe = async (
@@ -26,7 +26,7 @@ export const getMe = async (
 
 /** ----------------------------------
  * @desc    update me
- * @route   POST /api/v1/users/getMe
+ * @route   PATCH /api/v1/users/me
  * @access  Users
  */
 export const updateMe = async (

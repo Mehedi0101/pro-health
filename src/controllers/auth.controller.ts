@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { forgotPassword, loginUser, registerUser, resetPassword, verifyOtp } from "../services";
+import {
+  forgotPassword,
+  loginUser,
+  registerUser,
+  resetPassword,
+  verifyOtp,
+} from "../services";
 import { ILoginInput } from "../types";
 
 /** ----------------------------------
@@ -81,7 +87,7 @@ export const login = async (
 export const forgotPasswordController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     await forgotPassword(req.body);
@@ -103,7 +109,7 @@ export const forgotPasswordController = async (
 export const verifyOtpController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     await verifyOtp(req.body);
@@ -125,7 +131,7 @@ export const verifyOtpController = async (
 export const resetPasswordController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     await resetPassword(req.body);
@@ -133,6 +139,33 @@ export const resetPasswordController = async (
     res.status(200).json({
       success: true,
       message: "Password reset successful",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * @desc    Logout current user
+ * @route   POST /api/v1/auth/logout
+ * @access  Private
+ */
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    // Clear the cookie
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
     });
   } catch (err) {
     next(err);
