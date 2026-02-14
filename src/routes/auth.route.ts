@@ -12,25 +12,25 @@ import { requireAuth } from "../middlewares";
 
 const router = Router();
 
-// user register
+// POST (user register)
 router.post("/register", register);
 
-// user login
+// POST (user login)
 router.post("/login", login);
 
-// forgot password
+// POST (forgot password)
 router.post("/forgot-password", forgotPasswordController);
 
-// verify otp
+// POST (verify otp)
 router.post("/verify-otp", verifyOtpController);
 
-// reset password
+// POST (reset password)
 router.post("/reset-password", resetPasswordController);
 
-// update password
+// PATCH (update password)
 router.patch("/update-password", requireAuth, updatePassword);
 
-// logout
+// POST (logout)
 router.post("/logout", requireAuth, logout);
 
 export default router;

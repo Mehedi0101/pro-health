@@ -4,10 +4,10 @@ import { getMe, updateMe } from "../controllers";
 
 const router = Router();
 
-// get me
+// GET me
 router.get("/me", requireAuth, getMe);
 
-// update me
+// PATCH (update me)
 router.patch("/me", requireAuth, updateMe);
 
 export default router;
