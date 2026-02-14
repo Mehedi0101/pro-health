@@ -10,7 +10,7 @@ export { IService } from "./schemas/Service.types";
 export { IPackage } from "./schemas/Package.types";
 export { IPackageService } from "./schemas/PackageService.types";
 export { IPayment } from "./schemas/Payment.types";
-export { IPatientService } from "./schemas/PatientService.types";
+export { IAppointment } from "./schemas/Appointment.types";
 export { IPatientPackage } from "./schemas/PatientPackage.types";
 export { IPatientPackageService } from "./schemas/PatientPackageService.types";
 export { ICustomError } from "./middlewares/errorHandler.types";

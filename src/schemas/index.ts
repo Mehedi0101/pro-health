@@ -10,7 +10,7 @@ export { Service } from './Service.schema';
 export { Package } from './Package.schema';
 export { PackageService } from './PackageService.schema';
 export { Payment } from './Payment.schema';
-export { PatientService } from './PatientService.schema';
+export { Appointment } from './Appointment.schema';
 export { PatientPackage } from './PatientPackage.schema';
 export { PatientPackageService } from './PatientPackageService.schema';
 export { PasswordReset } from './PasswordReset.schema';

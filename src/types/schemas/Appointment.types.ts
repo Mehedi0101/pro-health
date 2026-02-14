@@ -1,6 +1,6 @@
 import { Document, Types } from 'mongoose';
 
-export interface IPatientService extends Document {
+export interface IAppointment extends Document {
   patient_id: Types.ObjectId;
   service_id: Types.ObjectId;
   branch_id: Types.ObjectId;
