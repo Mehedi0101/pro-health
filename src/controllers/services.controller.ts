@@ -4,7 +4,7 @@ import { getAllServices } from "../services";
 /**
  * @desc    Get all services
  * @route   GET /api/v1/services/
- * @access  Usersr
+ * @access  Users
  */
 export const getServices = async (
   req: Request,

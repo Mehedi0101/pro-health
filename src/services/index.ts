@@ -2,3 +2,4 @@ export { registerUser, loginUser, forgotPassword, verifyOtp, resetPassword, upda
 export { sendOtpEmail } from "./mail.service";
 export { getMeService, updateUser } from "./user.service";
 export { getAllServices } from "./services.service";
+export { getAllBranches } from "./branch.service";

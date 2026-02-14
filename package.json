@@ -10,7 +10,8 @@
     "dev": "nodemon --watch src --exec ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "seed:services": "ts-node src/seed/service.seed.ts"
+    "seed:services": "ts-node src/seed/service.seed.ts",
+    "seed:branches": "ts-node src/seed/branch.seed.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
