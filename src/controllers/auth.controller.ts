@@ -4,6 +4,7 @@ import {
   loginUser,
   registerUser,
   resetPassword,
+  updatePasswordService,
   verifyOtp,
 } from "../services";
 import { ILoginInput } from "../types";
@@ -139,6 +140,34 @@ export const resetPasswordController = async (
     res.status(200).json({
       success: true,
       message: "Password reset successful",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * @desc    Update logged-in user's password
+ * @route   PATCH /api/v1/auth/update-password
+ * @access  Private
+ */
+export const updatePassword = async (
+  req: Request & { user?: any },
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.user._id;
+    const { currentPassword, newPassword } = req.body;
+
+    await updatePasswordService(userId.toString(), {
+      currentPassword,
+      newPassword,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
     });
   } catch (err) {
     next(err);

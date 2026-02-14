@@ -1,22 +1,36 @@
 import bcrypt from "bcrypt";
 import mongoose, { HydratedDocument } from "mongoose";
-import { IForgotPasswordInput, ILoginInput, IRegisterInput, IResetPasswordInput, IUser, IVerifyOtpInput } from "../types";
+import {
+  IForgotPasswordInput,
+  ILoginInput,
+  IRegisterInput,
+  IResetPasswordInput,
+  IUpdatePasswordInput,
+  IUser,
+  IVerifyOtpInput,
+} from "../types";
 import { PasswordReset, Patient, Staff, User } from "../schemas";
-import { generateOTP, generateReferralLink, generateToken, generateUniqueReferralCode } from "../utils";
+import {
+  generateOTP,
+  generateReferralLink,
+  generateToken,
+  generateUniqueReferralCode,
+} from "../utils";
 import { sendOtpEmail } from "./mail.service";
 
 // ---------- register service ----------
 export const registerUser = async (
   input: IRegisterInput,
 ): Promise<HydratedDocument<IUser>> => {
-
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
     // Checking existing user
-    const existingUser = await User.findOne({ email: input.email }).session(session);
+    const existingUser = await User.findOne({ email: input.email }).session(
+      session,
+    );
 
     if (existingUser) {
       const error = new Error("Email already registered") as any;
@@ -44,7 +58,6 @@ export const registerUser = async (
 
     // PATIENT
     if (input.role === "patient") {
-
       const code = await generateUniqueReferralCode();
 
       await Patient.create(
@@ -61,11 +74,10 @@ export const registerUser = async (
 
     // STAFF
     else if (input.role === "staff") {
-
       await Staff.create(
         [
           {
-            user_id: createdUser._id
+            user_id: createdUser._id,
           },
         ],
         { session },
@@ -76,12 +88,9 @@ export const registerUser = async (
     await session.commitTransaction();
 
     return createdUser;
-
   } catch (error) {
-
     await session.abortTransaction();
     throw error;
-
   } finally {
     session.endSession();
   }
@@ -187,11 +196,40 @@ export const resetPassword = async (input: IResetPasswordInput) => {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
   // Update user password
-  await User.updateOne(
-    { email },
-    { password: hashedPassword }
-  );
+  await User.updateOne({ email }, { password: hashedPassword });
 
   // Delete used OTP record
   await PasswordReset.deleteOne({ _id: record._id });
+};
+
+// ---------- update password service ----------
+export const updatePasswordService = async (
+  userId: string,
+  input: IUpdatePasswordInput,
+): Promise<void> => {
+  const { currentPassword, newPassword } = input;
+
+  // Find the user
+  const user: HydratedDocument<IUser> | null =
+    await User.findById(userId).select("+password");
+  if (!user) {
+    const error = new Error("User not found") as any;
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Verify current password
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch) {
+    const error = new Error("Current password is incorrect") as any;
+    error.statusCode = 400;
+    throw error;
+  }
+
+  // Hash new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Update password
+  user.password = hashedPassword;
+  await user.save();
 };

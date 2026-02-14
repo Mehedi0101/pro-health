@@ -24,3 +24,9 @@ export interface IResetPasswordInput {
   otp: string;
   newPassword: string;
 }
+
+export interface IUpdatePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+}
+

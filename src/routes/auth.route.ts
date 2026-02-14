@@ -5,6 +5,7 @@ import {
   logout,
   register,
   resetPasswordController,
+  updatePassword,
   verifyOtpController,
 } from "../controllers";
 import { requireAuth } from "../middlewares";
@@ -25,6 +26,9 @@ router.post("/verify-otp", verifyOtpController);
 
 // reset password
 router.post("/reset-password", resetPasswordController);
+
+// update password
+router.patch("/update-password", requireAuth, updatePassword);
 
 // logout
 router.post("/logout", requireAuth, logout);
