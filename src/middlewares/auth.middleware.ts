@@ -1,12 +1,12 @@
 // external imports
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction, Request } from "express";
 import jwt from "jsonwebtoken";
 
 // internal imports
 import { User } from "../schemas";
 
-export const protect = async (
-  req: Request,
+export const requireAuth = async (
+  req: Request & { user?: any } & { cookies?: any }, // <--- optional user here
   res: Response,
   next: NextFunction,
 ) => {
@@ -17,7 +17,7 @@ export const protect = async (
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Not authenticated",
+        message: "Unauthorized",
       });
     }
 

@@ -47,7 +47,6 @@ export const login = async (
     const input: ILoginInput = req.body;
 
     const { user, token } = await loginUser(input);
-    console.log(user);
 
     // Set cookie
     res.cookie("token", token, {

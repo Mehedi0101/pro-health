@@ -4,10 +4,12 @@ import express, { Request, Response } from "express";
 // internal imports
 import router from "./routes";
 import { errorHandler } from "./middlewares";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 // health check
 app.get("/", (req: Request, res: Response) => {
