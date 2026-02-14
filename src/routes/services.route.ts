@@ -1,4 +1,3 @@
-// src/routes/services.route.ts
 import { Router } from "express";
 import { getServices } from "../controllers";
 import { requireAuth } from "../middlewares";

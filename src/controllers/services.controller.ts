@@ -12,7 +12,9 @@ export const getServices = async (
   next: NextFunction,
 ) => {
   try {
-    const services = await getAllServices();
+    const searchQuery = req.query.search as string | undefined;
+
+    const services = await getAllServices(searchQuery);
 
     res.status(200).json({
       success: true,
